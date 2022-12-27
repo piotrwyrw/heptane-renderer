@@ -2,16 +2,21 @@ package org.piotrwyrw.heptane.ui;
 
 import org.piotrwyrw.heptane.Heptane;
 import org.piotrwyrw.heptane.engine.Scene;
+import org.piotrwyrw.heptane.engine.Vector;
+import org.piotrwyrw.heptane.shapes.Shader;
 import org.piotrwyrw.heptane.shapes.Sphere;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class Viewer extends JPanel {
 
     public Viewer() {
         super();
         new Thread(() -> {
             Scene s = Heptane.getScene();
+            AtomicReference<Double> angle = new AtomicReference<>(0.0);
             while (true) {
                 repaint();
                 s.render();
