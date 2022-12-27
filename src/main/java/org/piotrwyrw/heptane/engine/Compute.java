@@ -10,7 +10,7 @@ import java.awt.*;
 public class Compute {
 
     // Limit the amount of light bounces (reflections)
-    public static int MAX_BOUNCES = 2;
+    public static int MAX_BOUNCES = 100;
 
     /**
      * Apply the general formula for solving quadratics:
@@ -25,12 +25,12 @@ public class Compute {
 
         double d = (-b - Math.sqrt(discriminant)) / (2 * a);
 
-        if (d > 0.001)
+        if (d > Double.MIN_VALUE)
             return d;
 
         d = (-b + Math.sqrt(discriminant)) / (2 * a);
 
-        if (d >= 0.001)
+        if (d >= Double.MIN_VALUE)
             return d;
 
         return -1.0;
@@ -46,6 +46,8 @@ public class Compute {
     }
 
     public static Pair<Renderable, Intersection> findIntersection(Scene s, Vector org, Vector dir, Renderable ignore) {
+        dir.normalize();
+
         Ray ray = new Ray(org, dir);
 
         // Find the intersecting sphere
@@ -88,6 +90,7 @@ public class Compute {
     }
 
     public static Pair<Color, Renderable> trace(Scene s, Vector org, Vector dir, Renderable ignore, int bounces) {
+        dir.normalize();
 
         Pair<Renderable, Intersection> intersecting = findIntersection(s, org, dir, ignore);
 
@@ -119,8 +122,9 @@ public class Compute {
             Color temperature = null;
 
             for (Renderable obj : s.getObjects()) {
-                if (obj.shader() != Shader.LAMP || !(obj instanceof Sphere))
+                if (obj.shader() != Shader.LAMP || !(obj instanceof Sphere)) {
                     continue;
+                }
 
                 Sphere sphere = (Sphere) obj;
 
@@ -131,8 +135,6 @@ public class Compute {
 
                 if (l.getFirst().shader() != Shader.LAMP)
                     continue;
-
-                Vector lampIp = l.getLast().getRay().pointAt(l.getLast().getDistance());
 
                 if (l.getLast().getDistance() > Shader.LAMP_RANGE)
                     continue;

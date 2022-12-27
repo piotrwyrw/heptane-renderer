@@ -47,10 +47,13 @@ public class Heptane {
         s.add(new Sphere(new Vector(0.0, 0.0, -470.0), 500, Color.decode("#55efc4"), Vector.zero(), Shader.DIFFUSE));
 
         // The reflective sphere in the middle of the room
-        s.add(new Sphere(new Vector(0.0, 3.7, 20.0), 1.5, Color.gray, Vector.zero(), Shader.MIRROR));
+        for (int x = 0; x < 5; x ++)
+            for (int y  = 0; y < 5; y ++) {
+                s.add(new Sphere(new Vector(-5.0 + x * 2.3, -5.0 + y * 2.3, 25.0 - Math.random() * 5.0), 1.0, Color.WHITE, Vector.zero(), Shader.MIRROR));
+            }
 
         // Ceiling lamp
-        s.add(new Sphere(new Vector(1.5, -2.0, 15.0), 1.0, Color.decode("#0984e3"), Vector.zero(), Shader.LAMP));
+        s.add(new Sphere(new Vector(1.5, -2.0, 15.0), 1.0, Color.decode("#e67e22"), Vector.zero(), Shader.LAMP));
 
         new Interface();
     }

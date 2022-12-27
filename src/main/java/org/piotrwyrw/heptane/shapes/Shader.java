@@ -7,6 +7,6 @@ public enum Shader {
     LAMP,
     MIRROR;
 
-    public static final double LAMP_RANGE = 1.1;
+    public static final double LAMP_RANGE = 10.0;
 
 }

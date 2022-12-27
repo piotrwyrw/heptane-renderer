@@ -2,8 +2,7 @@ package org.piotrwyrw.heptane.ui;
 
 import org.piotrwyrw.heptane.Heptane;
 import org.piotrwyrw.heptane.engine.Scene;
-import org.piotrwyrw.heptane.engine.Vector;
-import org.piotrwyrw.heptane.shapes.Shader;
+
 import org.piotrwyrw.heptane.shapes.Sphere;
 
 import javax.swing.*;
@@ -19,6 +18,7 @@ public class Viewer extends JPanel {
             AtomicReference<Double> angle = new AtomicReference<>(0.0);
             while (true) {
                 repaint();
+                System.out.println("Rendering ..");
                 s.render();
                 s.getObjects().forEach((e) -> {
                     if (e instanceof Sphere)
