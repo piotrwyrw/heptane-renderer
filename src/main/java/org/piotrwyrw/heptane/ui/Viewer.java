@@ -1,8 +1,8 @@
-package org.piotrwyrw.rtx.ui;
+package org.piotrwyrw.heptane.ui;
 
-import org.piotrwyrw.rtx.RTXEngine;
-import org.piotrwyrw.rtx.engine.Scene;
-import org.piotrwyrw.rtx.shapes.Sphere;
+import org.piotrwyrw.heptane.Heptane;
+import org.piotrwyrw.heptane.engine.Scene;
+import org.piotrwyrw.heptane.shapes.Sphere;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ public class Viewer extends JPanel {
     public Viewer() {
         super();
         new Thread(() -> {
-            Scene s = RTXEngine.getScene();
+            Scene s = Heptane.getScene();
             while (true) {
                 repaint();
                 s.render();
@@ -28,6 +28,6 @@ public class Viewer extends JPanel {
         g.setColor(Color.decode("#2c2c54"));
         g.fillRect(0, 0, Interface.DIMENSION, Interface.DIMENSION);
 
-        g.drawImage(RTXEngine.getScene().getResult(), 0, 0, null);
+        g.drawImage(Heptane.getScene().getResult(), 0, 0, null);
     }
 }

@@ -1,4 +1,4 @@
-package org.piotrwyrw.rtx.engine;
+package org.piotrwyrw.heptane.engine;
 
 public class Ray {
 

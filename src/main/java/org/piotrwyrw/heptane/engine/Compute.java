@@ -1,7 +1,7 @@
-package org.piotrwyrw.rtx.engine;
+package org.piotrwyrw.heptane.engine;
 
-import org.piotrwyrw.rtx.Pair;
-import org.piotrwyrw.rtx.shapes.Renderable;
+import org.piotrwyrw.heptane.Pair;
+import org.piotrwyrw.heptane.shapes.Renderable;
 
 import java.awt.*;
 

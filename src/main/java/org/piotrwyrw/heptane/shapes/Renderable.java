@@ -1,8 +1,8 @@
-package org.piotrwyrw.rtx.shapes;
+package org.piotrwyrw.heptane.shapes;
 
-import org.piotrwyrw.rtx.engine.Intersection;
-import org.piotrwyrw.rtx.engine.Ray;
-import org.piotrwyrw.rtx.engine.Vector;
+import org.piotrwyrw.heptane.engine.Intersection;
+import org.piotrwyrw.heptane.engine.Ray;
+import org.piotrwyrw.heptane.engine.Vector;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package org.piotrwyrw.rtx.ui;
+package org.piotrwyrw.heptane.ui;
 
 import javax.swing.*;
 

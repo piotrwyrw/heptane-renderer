@@ -1,4 +1,4 @@
-package org.piotrwyrw.rtx;
+package org.piotrwyrw.heptane;
 
 public class Pair<K, V> {
 
