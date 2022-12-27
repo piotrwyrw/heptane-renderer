@@ -10,12 +10,14 @@ public class Sphere extends Renderable {
     private double radius;
     private Color color;
     private Vector velocity;
+    private Shader shader;
 
-    public Sphere(Vector center, double radius, Color color, Vector velocity) {
+    public Sphere(Vector center, double radius, Color color, Vector velocity, Shader shader) {
         this.center = center;
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        this.shader = shader;
     }
 
     public Vector getCenter() {
@@ -48,6 +50,14 @@ public class Sphere extends Renderable {
 
     public void setVelocity(Vector velocity) {
         this.velocity = velocity;
+    }
+
+    public Shader getShader() {
+        return shader;
+    }
+
+    public void setShader(Shader shader) {
+        this.shader = shader;
     }
 
     public void update() {
@@ -86,5 +96,10 @@ public class Sphere extends Renderable {
     @Override
     public Color baseColor() {
         return this.color;
+    }
+
+    @Override
+    public Shader shader() {
+        return this.shader;
     }
 }

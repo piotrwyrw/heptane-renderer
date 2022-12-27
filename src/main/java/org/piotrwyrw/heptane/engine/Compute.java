@@ -2,6 +2,8 @@ package org.piotrwyrw.heptane.engine;
 
 import org.piotrwyrw.heptane.Pair;
 import org.piotrwyrw.heptane.shapes.Renderable;
+import org.piotrwyrw.heptane.shapes.Shader;
+import org.piotrwyrw.heptane.shapes.Sphere;
 
 import java.awt.*;
 
@@ -23,12 +25,12 @@ public class Compute {
 
         double d = (-b - Math.sqrt(discriminant)) / (2 * a);
 
-        if (d > 0.0)
+        if (d > 0.001)
             return d;
 
         d = (-b + Math.sqrt(discriminant)) / (2 * a);
 
-        if (d >= 0.0)
+        if (d >= 0.001)
             return d;
 
         return -1.0;
@@ -43,7 +45,7 @@ public class Compute {
         );
     }
 
-    public static Pair<Renderable, Intersection> findIntersectingSphere(Scene s, Vector org, Vector dir, Renderable ignore) {
+    public static Pair<Renderable, Intersection> findIntersection(Scene s, Vector org, Vector dir, Renderable ignore) {
         Ray ray = new Ray(org, dir);
 
         // Find the intersecting sphere
@@ -87,7 +89,7 @@ public class Compute {
 
     public static Pair<Color, Renderable> trace(Scene s, Vector org, Vector dir, Renderable ignore, int bounces) {
 
-        Pair<Renderable, Intersection> intersecting = findIntersectingSphere(s, org, dir, ignore);
+        Pair<Renderable, Intersection> intersecting = findIntersection(s, org, dir, ignore);
 
         Color c = Color.WHITE;
 
@@ -106,19 +108,81 @@ public class Compute {
         // Shade (color)
         c = object.baseColor();
 
-        if (bounces > MAX_BOUNCES)
-            return new Pair<>(object.baseColor(), object);
+        if (object.shader() == Shader.DIFFUSE || object.shader() == Shader.REFLECTIVE) {
+            c = object.baseColor();
 
-        c = mix(object.baseColor(), trace(s, ip, n, object, bounces + 1).getFirst());
+            // Distance to the nearest light source
+
+            double illumination = 0.0;
+            int lamps = 0;
+
+            Color temperature = null;
+
+            for (Renderable obj : s.getObjects()) {
+                if (obj.shader() != Shader.LAMP || !(obj instanceof Sphere))
+                    continue;
+
+                Sphere sphere = (Sphere) obj;
+
+                Pair<Renderable, Intersection> l = findIntersection(s, ip, new Vector(sphere.getCenter()).subtract(ip), object);
+
+                if (l == null)
+                    continue;
+
+                if (l.getFirst().shader() != Shader.LAMP)
+                    continue;
+
+                Vector lampIp = l.getLast().getRay().pointAt(l.getLast().getDistance());
+
+                if (l.getLast().getDistance() > Shader.LAMP_RANGE)
+                    continue;
+
+                temperature = l.getFirst().baseColor();
+
+                illumination += l.getLast().getDistance() / Shader.LAMP_RANGE;
+
+                lamps++;
+            }
+
+            double b = 1 - illumination / lamps;
+
+            if (object.shader() == Shader.REFLECTIVE) {
+                if (bounces > MAX_BOUNCES)
+                    return new Pair<>(object.baseColor(), object);
+
+                c = mix(object.baseColor(), trace(s, ip, n, object, bounces + 1).getFirst());
+                c = brightness(c, b);
+            } else
+                c = brightness(mix(c, temperature), b);
+
+        } else if (object.shader() == Shader.LAMP) {
+            c = object.baseColor().brighter().brighter().brighter().brighter().brighter().brighter().brighter().brighter().brighter();
+        } else if (object.shader() == Shader.MIRROR) {
+            if (bounces > MAX_BOUNCES)
+                return new Pair<>(object.baseColor(), object);
+
+            c = trace(s, ip, n, object, bounces + 1).getFirst();
+        }
 
         return new Pair<>(c, object);
     }
 
     public static Color mix(Color a, Color b) {
+        if (b == null)
+            return a;
+
         return new Color(
                 (int) (a.getRed() + b.getRed()) / 2,
                 (int) (a.getGreen() + b.getGreen()) / 2,
                 (int) (a.getBlue() + b.getBlue()) / 2
+        );
+    }
+
+    public static Color brightness(Color c, double brightness) {
+        return new Color(
+                (int) (c.getRed() * brightness),
+                (int) (c.getGreen() * brightness),
+                (int) (c.getBlue() * brightness)
         );
     }
 

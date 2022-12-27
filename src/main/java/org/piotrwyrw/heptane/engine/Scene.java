@@ -3,8 +3,11 @@ package org.piotrwyrw.heptane.engine;
 import org.piotrwyrw.heptane.shapes.Renderable;
 import org.piotrwyrw.heptane.ui.Interface;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Scene {
@@ -28,6 +31,13 @@ public class Scene {
 
                 result.setRGB(x, y, c.getRGB());
             }
+
+        try {
+            ImageIO.write(result, "PNG", new File("output.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public ArrayList<Renderable> getObjects() {

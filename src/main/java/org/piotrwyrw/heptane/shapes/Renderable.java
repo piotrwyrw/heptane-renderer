@@ -11,5 +11,6 @@ public abstract class Renderable {
     public abstract Vector normalVector(Vector point);
     public abstract Intersection intersect(Ray ray);
     public abstract Color baseColor();
+    public abstract Shader shader();
 
 }
